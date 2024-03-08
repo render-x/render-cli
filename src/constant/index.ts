@@ -5,7 +5,7 @@ export const CLI_NAME = 'render-cli';
 
 export const APP_LIST: Array<{ name: string; value: string }> = [
   {
-    name: 'react组件库模板（component）',
+    name: 'Component',
     value: '@x.render/react-component-template',
   },
   {

@@ -150,7 +150,7 @@ class InitCommand extends RenderCommand {
     fse.removeSync(targetPath);
     fse.ensureDirSync(soureDirPath);
     fse.ensureDirSync(targetPath);
-    // 模版文件复制到目标文件夹
+
     fse.copySync(path.join(soureDirPath, 'template'), targetPath);
 
     const pkgJsonPath = path.resolve(targetPath, 'package.json');
