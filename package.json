@@ -1,6 +1,6 @@
 {
   "name": "@x.render/render-cli",
-  "description": "#### 介绍 为项目服务的脚手架：支持组件、中后台应用、H5应用下载、开发、编译、云构建和云发布",
+  "description": "A basic scaffold that supports downloading application templates, integrates the render-builder internally for application development and construction, and provides cloud publishing and cloud building features.",
   "version": "1.0.0",
   "main": "lib/index.js",
   "keywords": [],
