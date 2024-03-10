@@ -9,20 +9,12 @@ export const APP_LIST: Array<{ name: string; value: string }> = [
     value: "@x.render/react-component-template",
   },
   {
-    name: "React backend applications",
+    name: "React application",
+    value: "@x.render/react-app-template",
+  },
+  {
+    name: "React backend application",
     value: "@x.render/react-admin-template",
-  },
-  {
-    name: "模块库模版（module）",
-    value: "@render-ae86/ae86-module-template",
-  },
-  {
-    name: "react移动端H5应用模板 (h5)",
-    value: "moga-h5",
-  },
-  {
-    name: "react多页面应用模板（mpa）",
-    value: "moga-mpa",
   },
 ];
 
