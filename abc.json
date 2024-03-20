@@ -1,0 +1,6 @@
+{
+  "uploadConfig": {
+    "sourceDir": "buildx1",
+    "domain": "http://cdn.xrender.top"
+  }
+}

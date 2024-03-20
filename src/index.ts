@@ -6,7 +6,7 @@ import fs = require('fs');
 import initCommand = require('./commands/init');
 import startCommand = require('./commands/start');
 import buildCommand = require('./commands/build');
-import publishCommand = require('./commands/publish');
+import uploadCommand = require('./commands/upload');
 
 import { similar, log } from '@x.render/render-node-utils';
 import { CLI_NAME, USER_HOME_PATH } from './constant';
@@ -60,35 +60,39 @@ const registerCommand = () => {
   // initialize the render app
   program
     .command('init [command]')
-    .description('initialize the project')
-    .option('-f, --force', 'force initialize the project', false)
+    .description('Download app')
+    .option('-f, --force', 'force download app', false)
     .action((...arg) => {
       initCommand(arg[0], arg[1], arg[2]);
     });
 
-  // run the render app
   program
     .command('start [command]')
-    .description('run the render app')
+    .description('Run app')
     .option('--config [config]', 'specify configuration file location')
     .action((...arg) => {
       startCommand(arg[0], arg[1], arg[2]);
     });
 
-  // build render app
   program
     .command('build [command]')
-    .description('build the render app')
+    .description('Build  app')
+    .option('--config [config]', 'specify configuration file location')
     .action((...arg) => {
       buildCommand(arg[0], arg[1], arg[2]);
     });
 
-  // publish the render component or app
   program
-    .command('publish [command]')
-    .description('publish the render component or app')
+    .command('upload [command]')
+    .description(
+      'Upload your files to Alibaba Cloud OSS\n\n' +
+        'The directory to be uploaded and the directory after uploading can be configured in the abc.json file in the project.\n\n' +
+        'uploadConfig.sourceDir indicates the directory to be uploaded. The default value is: dist.\n\n' +
+        'uploadConfig.target represents the directory after uploading. The default value is: name in package.json in the project root directory.\n',
+    )
+    .option('-r, --reset', 'reset upload config')
     .action((...arg) => {
-      publishCommand(arg[0], arg[1], arg[2]);
+      uploadCommand(arg[0], arg[1], arg[2]);
     });
 
   // command tips
@@ -119,6 +123,12 @@ const registerCommand = () => {
 
   program.on('option:testPath', () => {
     process.env.LOCAL_DEV_PATH = program.opts().testPath;
+  });
+
+  program.on('--help', () => {
+    console.log('');
+    console.log('更多帮助信息：');
+    console.log('');
   });
 
   program.parse(process.argv);
