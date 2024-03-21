@@ -67,3 +67,17 @@ or
 ```bash
 render upload -r
 ```
+
+默认上传的目录和上传后 Bucket 的目录分别为：dist 和当前项目 package.json 中的 name，你可以在项目中使用 abc.josn 去改变这种默认行为，下面是一个配置示例：
+
+```json
+{
+  "uploadConfig": {
+    "sourceDir": "build",
+    "targetDir": "pages",
+    "domain": "https://example.com"
+  }
+}
+```
+
+其中 domain 会替换返回的文件 OSS 访问地址中的域名，方便预览文件。

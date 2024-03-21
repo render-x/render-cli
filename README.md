@@ -67,3 +67,17 @@ or
 ```bash
 render upload -r
 ```
+
+The default upload directory and the Bucket directory after upload are: dist and the name in the current project package.json. You can use abc.josn in the project to change this default behavior. The following is a configuration example:
+
+```json
+{
+  "uploadConfig": {
+    "sourceDir": "build",
+    "targetDir": "pages",
+    "domain": "https://example.com"
+  }
+}
+```
+
+Among them, domain will replace the domain name in the returned file OSS access address to facilitate file preview.
