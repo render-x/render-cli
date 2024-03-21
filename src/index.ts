@@ -125,12 +125,6 @@ const registerCommand = () => {
     process.env.LOCAL_DEV_PATH = program.opts().testPath;
   });
 
-  program.on('--help', () => {
-    console.log('');
-    console.log('更多帮助信息：');
-    console.log('');
-  });
-
   program.parse(process.argv);
 };
 
