@@ -47,3 +47,23 @@ render init --force
 render-cli 使用多进程调用 render-builder 来实现 start 和 build 命令。
 
 [这里可以看到 render-builde 中 start 和 build 命令的介绍](https://www.npmjs.com/package/@x.render/render-builder#commands)
+
+### upload
+
+upload 命令用于上传构建产物到阿里云 OSS。
+
+```bash
+render upload
+```
+
+第一次使用时，会填写一些配置信息，用于文件上传，使用 reset 选项可以重置之前的配置信息：
+
+```bash
+render upload --reset
+```
+
+or
+
+```bash
+render upload -r
+```

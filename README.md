@@ -47,3 +47,23 @@ render init --force
 Render-cli uses multiple processes to call render-builder to implement the start and build commands.
 
 [Here you can see an introduction to the start and build commands in render-builder](https://www.npmjs.com/package/@x.render/render-builder#commands)
+
+### upload
+
+The upload command can upload files to Alibaba Cloud OSS.
+
+```bash
+render upload
+```
+
+When using it for the first time, some configuration information will be filled in, which is used for file upload. Use the reset option to reset previous configuration information:
+
+```bash
+render upload --reset
+```
+
+or
+
+```bash
+render upload -r
+```

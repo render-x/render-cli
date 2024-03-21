@@ -6,6 +6,8 @@ import { CLI_HOME, UPLOAD_CONFIG_FILT } from '../constant';
 import recursive = require('recursive-readdir');
 import chalk = require('chalk');
 import ora = require('ora');
+import { log } from '@x.render/render-node-utils';
+import { ABC } from '../types';
 
 const OSS = require('ali-oss');
 const inquirer = require('inquirer');
@@ -14,7 +16,13 @@ const prompt = inquirer.prompt;
 
 const cwd = process.cwd();
 const pkg = require(path.resolve(cwd, 'package.json'));
-const abc = require(path.resolve(cwd, 'abc.json'));
+
+let abc: ABC = {};
+try {
+  abc = require(path.resolve(cwd, 'abc.json'));
+} catch (error) {
+  abc = {};
+}
 
 const configFilePath = path.resolve(
   USER_HOME_PATH,
@@ -44,7 +52,17 @@ class UploadCommand extends RenderCommand {
     this.exec();
   }
 
+  printTipInfo() {
+    console.log(
+      chalk.blue(
+        'Tips: The upload function uses ali-oss SDK, we need you to fill in some information.' +
+          'You can fill it in with confidence. We will not obtain this information in any form. All information will be stored locally.',
+      ),
+    );
+  }
+
   async saveUploadConfig() {
+    this.printTipInfo();
     this.uploadConfig = await this.getUploadConfig();
     fse.ensureFileSync(configFilePath);
     fse.writeFileSync(
@@ -132,7 +150,7 @@ class UploadCommand extends RenderCommand {
 
   getUrl(url: string) {
     const urlObject = new URL(url);
-    const origin = abc.uploadConfig.domain || urlObject.origin;
+    const origin = abc?.uploadConfig?.domain || urlObject.origin;
     return origin + urlObject.pathname;
   }
 
