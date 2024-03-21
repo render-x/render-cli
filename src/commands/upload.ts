@@ -6,7 +6,6 @@ import { CLI_HOME, UPLOAD_CONFIG_FILT } from '../constant';
 import recursive = require('recursive-readdir');
 import chalk = require('chalk');
 import ora = require('ora');
-import { log } from '@x.render/render-node-utils';
 import { ABC } from '../types';
 
 const OSS = require('ali-oss');
@@ -14,34 +13,35 @@ const inquirer = require('inquirer');
 
 const prompt = inquirer.prompt;
 
-const cwd = process.cwd();
-const pkg = require(path.resolve(cwd, 'package.json'));
-
-let abc: ABC = {};
-try {
-  abc = require(path.resolve(cwd, 'abc.json'));
-} catch (error) {
-  abc = {};
-}
-
-const configFilePath = path.resolve(
-  USER_HOME_PATH,
-  CLI_HOME,
-  UPLOAD_CONFIG_FILT,
-);
-
 class UploadCommand extends RenderCommand {
   options: Json;
   client: any;
   uploadConfig: Record<string, any>;
+  configFilePath: string;
+  cwd: string;
+  pkg: Record<string, any>;
+  abc: ABC;
 
   constructor(rest: string, options: Json, cmd: CommandType) {
     super(rest, options, cmd);
+    this.configFilePath = path.resolve(
+      USER_HOME_PATH,
+      CLI_HOME,
+      UPLOAD_CONFIG_FILT,
+    );
+    this.cwd = process.cwd();
+    this.pkg = require(path.resolve(this.cwd, 'package.json'));
+
+    try {
+      this.abc = require(path.resolve(this.cwd, 'abc.json'));
+    } catch (error) {
+      this.abc = {};
+    }
     this.init();
   }
 
   async init() {
-    const hasConfigFile = fse.existsSync(path.resolve(configFilePath));
+    const hasConfigFile = fse.existsSync(path.resolve(this.configFilePath));
     let shouldInputConfig = !hasConfigFile;
     shouldInputConfig = this.options.reset ? true : shouldInputConfig;
 
@@ -64,9 +64,9 @@ class UploadCommand extends RenderCommand {
   async saveUploadConfig() {
     this.printTipInfo();
     this.uploadConfig = await this.getUploadConfig();
-    fse.ensureFileSync(configFilePath);
+    fse.ensureFileSync(this.configFilePath);
     fse.writeFileSync(
-      configFilePath,
+      this.configFilePath,
       JSON.stringify(this.uploadConfig, null, 2),
       {
         encoding: 'utf-8',
@@ -117,7 +117,7 @@ class UploadCommand extends RenderCommand {
   }
 
   async createOssInstance() {
-    this.uploadConfig = this.uploadConfig || require(configFilePath);
+    this.uploadConfig = this.uploadConfig || require(this.configFilePath);
     return await new OSS({
       region: this.uploadConfig.region,
       accessKeyId: this.uploadConfig.accessKeyId,
@@ -129,7 +129,7 @@ class UploadCommand extends RenderCommand {
   async getFileList(): Promise<string[]> {
     return new Promise((resolve, reject) => {
       recursive(
-        path.resolve(cwd, abc?.uploadConfig?.sourceDir || 'dist'),
+        path.resolve(this.cwd, this.abc?.uploadConfig?.sourceDir || 'dist'),
         (err, fileNames) => {
           if (err) {
             reject(err);
@@ -143,21 +143,21 @@ class UploadCommand extends RenderCommand {
   async getFileInfo() {
     const fileList = await this.getFileList();
     const fileNames = fileList.map((file) => {
-      return path.relative(cwd, file);
+      return path.relative(this.cwd, file);
     });
     return fileNames;
   }
 
   getUrl(url: string) {
     const urlObject = new URL(url);
-    const origin = abc?.uploadConfig?.domain || urlObject.origin;
+    const origin = this.abc?.uploadConfig?.domain || urlObject.origin;
     return origin + urlObject.pathname;
   }
 
   async putFile(filepath: string) {
     const spinner = ora('uploading: ' + filepath).start();
     const result = await this.client.put(
-      path.join(abc?.uploadConfig?.targetDir || pkg.name, filepath),
+      path.join(this.abc?.uploadConfig?.targetDir || this.pkg.name, filepath),
       path.normalize(filepath),
     );
 
