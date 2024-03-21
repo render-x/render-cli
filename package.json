@@ -1,7 +1,7 @@
 {
   "name": "@x.render/render-cli",
   "description": "A basic scaffold that supports downloading application templates, integrates the render-builder internally for application development and construction, and provides cloud publishing and cloud building features.",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "main": "lib/index.js",
   "keywords": [],
   "author": "",
@@ -46,7 +46,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@x.render/render-builder": "^1.0.5",
+    "@x.render/render-builder": "^1.3.0",
     "@x.render/render-command": "^1.2.0",
     "@x.render/render-node-utils": "^1.1.1",
     "@x.render/render-package": "^3.0.2",
